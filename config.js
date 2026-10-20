@@ -4,5 +4,5 @@ window.SW_CONFIG = {
   // 예: 'my-status' → https://my-status.goatcounter.com 에서 통계 확인
   goatcounter: '',
   // 배포 주소. 비워 두면 현재 주소를 쓴다. 카드 이미지 아래 문구에 들어간다.
-  siteUrl: ''
+  siteUrl: 'https://wiserabi.github.io/status-window/'
 };
