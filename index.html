@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>인생 상태창 — 내 상태창 열기</title>
+  <meta name="description" content="질문 10개로 내 인생 상태창을 연다. 체력, 정신력, 재력, 연애… 그리고 히든 업적.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="[시스템] 당신의 상태창이 도착했습니다">
+  <meta property="og:description" content="질문 10개로 열리는 내 인생 상태창. 친구랑 파티도 맺어보자.">
+  <meta property="og:image" content="og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#070b16">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='4' fill='%23070b16' stroke='%234fd1ff' stroke-width='2.5'/%3E%3Cpath d='M9 22V10h4v12M16 22l3-12 3 12' stroke='%234fd1ff' stroke-width='2.5' fill='none'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- 시작 -->
+    <section id="screen-intro" class="screen active">
+      <div id="invite-banner" class="window invite hidden">
+        <div class="sys">[시스템] 파티 초대가 도착했습니다</div>
+        <div id="invite-preview"></div>
+      </div>
+
+      <div class="window">
+        <div class="window-title">◆ 상태창 ◆</div>
+        <h1 class="hero">당신의 <em>인생 상태창</em>을<br>열겠습니까?</h1>
+        <p class="sub">질문 10개 · 1분 · 로그인 없음</p>
+        <form id="intro-form" autocomplete="off">
+          <label>이름 (닉네임)
+            <input id="in-name" type="text" maxlength="12" placeholder="예: 김모험" required>
+          </label>
+          <label>나이 <span class="muted">(레벨이 됩니다)</span>
+            <input id="in-age" type="number" inputmode="numeric" min="1" max="120" placeholder="예: 28" required>
+          </label>
+          <button type="submit" class="btn primary" id="btn-start">[ 상태창 열기 ]</button>
+        </form>
+      </div>
+      <p class="fineprint">재미로 보는 결과예요. 입력한 이름·나이·답은 서버에 저장하지 않고, 공유 링크 안에만 담깁니다.</p>
+    </section>
+
+    <!-- 질문 -->
+    <section id="screen-quiz" class="screen">
+      <div class="window">
+        <div class="progress"><div id="progress-bar"></div></div>
+        <div class="window-title" id="quiz-step">QUEST 1 / 10</div>
+        <h2 id="quiz-q" class="question"></h2>
+        <div id="quiz-options" class="options"></div>
+        <button type="button" class="btn ghost" id="btn-back">← 이전</button>
+      </div>
+    </section>
+
+    <!-- 로딩 -->
+    <section id="screen-loading" class="screen">
+      <div class="window center">
+        <div class="window-title">SYSTEM</div>
+        <div id="loading-lines" class="loading-lines"></div>
+      </div>
+    </section>
+
+    <!-- 결과 -->
+    <section id="screen-result" class="screen">
+      <div id="result-window" class="window status"></div>
+
+      <div id="party-window" class="window party hidden"></div>
+
+      <div class="actions">
+        <button type="button" class="btn primary" id="btn-save">상태창 이미지 저장</button>
+        <button type="button" class="btn" id="btn-share">친구에게 공유하고 파티 맺기</button>
+        <button type="button" class="btn locked" id="btn-hidden">🔒 히든 스탯 해금 <span class="price">990원</span></button>
+        <button type="button" class="btn ghost" id="btn-retry">처음부터 다시</button>
+      </div>
+      <p class="fineprint">재미로 보는 결과예요. 실제 능력과는 상관없습니다.</p>
+    </section>
+  </main>
+
+  <!-- 이미지 저장 창 -->
+  <div id="modal-image" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <img id="card-img" alt="내 상태창 이미지">
+      <p class="muted small">모바일은 이미지를 길게 눌러 저장할 수 있어요.</p>
+      <a id="card-download" class="btn primary" download="my-status.png">이미지 다운로드</a>
+      <button type="button" class="btn ghost" data-close>닫기</button>
+    </div>
+  </div>
+
+  <!-- 히든 스탯(가짜 문) 창 -->
+  <div id="modal-hidden" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-box window">
+      <div class="window-title">🔒 히든 스탯</div>
+      <div id="hidden-step1">
+        <p>해금하면 이런 걸 볼 수 있어요.</p>
+        <ul class="list">
+          <li>숨겨진 능력치 3개 (지구력 · 눈치 · 덕력)</li>
+          <li>전생 직업과 숨은 재능</li>
+          <li>올해 남은 기간의 버프 · 디버프 예보</li>
+          <li>능력치별 상세 해설</li>
+        </ul>
+        <p class="notice">아직 준비 중인 기능이에요. 지금은 결제가 되지 않아요.</p>
+        <button type="button" class="btn primary" id="btn-interest">출시되면 해볼래요</button>
+        <button type="button" class="btn ghost" data-close>괜찮아요</button>
+      </div>
+      <div id="hidden-step2" class="hidden">
+        <p>관심 고마워요! 반응이 많으면 빠르게 만들어 볼게요.</p>
+        <button type="button" class="btn ghost" data-close>닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="config.js"></script>
+  <script src="engine.js"></script>
+  <script src="card.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
